@@ -15,6 +15,7 @@ class XLNetModule(nn.Module):
 
         self.xlnet_model = XLNetModel.from_pretrained(
             xlnet_model_name, cache_dir=cache_dir, output_hidden_states=True
+            #pretrained_model_name_or_path='/content/elmmxlnet/xlnet-base/xlnet-base-cased-pytorch_model.bin', output_hidden_states=True
         )
         self.xlnet_model.train()
 
@@ -37,7 +38,7 @@ class XLNetLastCLSModule(nn.Module):
         return out
 
 
-class BertContactLastCLSWithTwoTokensModule(nn.Module):
+class XLNetContactLastCLSWithTwoTokensModule(nn.Module):
     def __init__(self):
         super().__init__()
 
