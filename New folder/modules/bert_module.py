@@ -15,6 +15,7 @@ class BertModule(nn.Module):
         self.bert_model = XLNetModel.from_pretrained(
             bert_model_name, cache_dir=cache_dir, output_hidden_states=True
         )
+        self.bert_model.train()
 
     def forward(self, token_ids, token_segments,token_type_ids=None, attention_mask=None):
         loss,  pooled_output, encoded_layers = self.bert_model(
