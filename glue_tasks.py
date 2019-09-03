@@ -3,7 +3,7 @@ from functools import partial
 import torch.nn.functional as F
 from emmental.scorer import Scorer
 from emmental.task import EmmentalTask
-from modules.bert_module import BertModule
+from modules.bert_module import BertModule, BertLastCLSModule
 from task_config import LABEL_MAPPING, METRIC_MAPPING
 from torch import nn
 from torch.nn import MSELoss
@@ -29,7 +29,7 @@ def output(task_name, immediate_ouput_dict):
     return immediate_ouput_dict[module_name][0]
 
 
-def get_gule_task(task_names, bert_model_name):
+def get_gule_task(task_names, bert_model_name, last_hidden_dropout_prob=0.0):
 
     tasks = dict()
 
@@ -55,8 +55,8 @@ def get_gule_task(task_names, bert_model_name):
             module_pool=nn.ModuleDict(
                 {
                     "bert_module": bert_module,
-                    f"{task_name}_pred_head": nn.Linear(
-                        bert_output_dim, task_cardinality
+                    f"{task_name}_feature": BertLastCLSModule(
+                    dropout_prob=last_hidden_dropout_prob
                     ),
                 }
             ),
