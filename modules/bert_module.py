@@ -1,6 +1,6 @@
 import os
 
-from pytorch_pretrained_bert.modeling import BertModel
+from pytorch_transformers.modeling_bert import BertModel
 from torch import nn
 
 
@@ -13,11 +13,14 @@ class BertModule(nn.Module):
             os.makedirs(cache_dir)
 
         self.bert_model = BertModel.from_pretrained(
-            bert_model_name, cache_dir=cache_dir
+            bert_model_name, cache_dir=cache_dir, output_hidden_states=True
         )
+        self.bert_model.train()
 
-    def forward(self, token_ids, token_type_ids=None, attention_mask=None):
-        encoded_layers, pooled_output = self.bert_model(
-            token_ids, token_type_ids, attention_mask
+    def forward(self, token_ids, token_segments,token_type_ids=None, attention_mask=None):
+        loss,  pooled_output, encoded_layers = self.bert_model(
+            token_ids, token_type_ids=None
         )
+        #pooled_output = self.dropout(pooled_output)
+        #logits = self.classifier(pooled_output)
         return encoded_layers, pooled_output
