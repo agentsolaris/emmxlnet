@@ -4,27 +4,7 @@ from torch import nn
 
 logger = logging.getLogger(__name__)
 
-class Operation:
-    """A single operation to execute in a task flow
-
-    The `name` attributes defaults to `module_name` since most of the time, each module
-    is used only once per task flow. For more advanced flows where the same module is
-    used multiple times per forward pass, a name may be explicitly given to
-    differentiate the Operations.
-    """
-
-    def __init__(self, module_name, inputs, name=None):
-        self.name = name or module_name
-        self.module_name = module_name
-        self.inputs = inputs
-
-    def __repr__(self):
-        return (
-            f"Operation(name={self.name}, "
-            f"module_name={self.module_name}, "
-            f"inputs={self.inputs}"
-        )
-        
+  
 class EmmentalTask(object):
     """Task class to define task in Emmental model.
 
