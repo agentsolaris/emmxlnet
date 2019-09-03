@@ -32,10 +32,10 @@ def output(task_name, immediate_ouput_dict):
 def get_gule_task(task_names, bert_model_name):
 
     tasks = dict()
-
+    
     bert_module = BertModule(bert_model_name)
     bert_output_dim = 768 if "base" in bert_model_name else 1024
-
+    last_hidden_dropout_prob=0.0
     for task_name in task_names:
         task_cardinality = (
             len(LABEL_MAPPING[task_name].keys())
@@ -50,11 +50,17 @@ def get_gule_task(task_names, bert_model_name):
         else:
             loss_fn = partial(ce_loss, task_name)
 
+        loss_fn = partial(ce_loss, f"{task_name}_pred_head")
+        #output_fn = partial(utils.output, f"{task_name}_pred_head")
+
         task = EmmentalTask(
             name=task_name,
             module_pool=nn.ModuleDict(
                 {
                     "bert_module": bert_module,
+                    f"{task_name}_feature": BertLastCLSModule(
+                    dropout_prob=last_hidden_dropout_prob
+                    ),
                     f"{task_name}_pred_head": nn.Linear(
                         bert_output_dim, task_cardinality
                     ),
@@ -62,7 +68,7 @@ def get_gule_task(task_names, bert_model_name):
             ),
             task_flow=[
                 {
-                    "name": "input",
+                    "name": f"{task_name}_bert_module",
                     "module": "bert_module",
                     "inputs": [
                         ("_input_", "token_ids"),
@@ -71,13 +77,18 @@ def get_gule_task(task_names, bert_model_name):
                     ],
                 },
                 {
+                    "name": f"{task_name}_feature",
+                    "module": f"{task_name}_feature",
+                    "inputs": [(f"{task_name}_bert_module", 0)],
+                },
+                {
                     "name": f"{task_name}_pred_head",
                     "module": f"{task_name}_pred_head",
-                    "inputs": [("input", 1)],
+                    "inputs": [(f"{task_name}_feature", 0)],
                 },
             ],
             loss_func=loss_fn,
-            output_func=partial(output, task_name),
+            output_func=partial(output, f"{task_name}_pred_head"),
             scorer=Scorer(metrics=metrics),
         )
 
