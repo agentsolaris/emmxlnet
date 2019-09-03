@@ -50,7 +50,7 @@ def get_gule_task(task_names, bert_model_name):
         else:
             loss_fn = partial(ce_loss, task_name)
 
-        loss_fn = partial(ce_loss, f"{task_name}_pred_head")
+        #loss_fn = partial(ce_loss, f"{task_name}_pred_head")
         #output_fn = partial(utils.output, f"{task_name}_pred_head")
 
         task = EmmentalTask(
