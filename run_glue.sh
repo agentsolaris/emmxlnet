@@ -21,7 +21,6 @@ python run.py \
   --data_dir ${GLUEDATA} \
   --log_path ${LOGPATH} \
   --device ${GPU} \
-  --fp16 True \
   --n_epochs 3 \
   --train_split train \
   --valid_split dev \
