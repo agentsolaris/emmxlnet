@@ -43,7 +43,7 @@ def preprocessor(
 
     do_lower_case = "uncased" in bert_model_name
 
-    tokenizer = XLNetTokenizer.from_pretrained(
+    tokenizer = BertTokenizer.from_pretrained(
         bert_model_name, do_lower_case=do_lower_case
     )
 
@@ -80,11 +80,11 @@ def preprocessor(
                     sent2_tokens.pop()
 
         # Convert to BERT manner
-        tokens =  sent1_tokens + ["[SEP]"]
+        tokens = ["[CLS]"] + sent1_tokens + ["[SEP]"]
         token_segments = [0] * len(tokens)
 
         if sent2_tokens:
-            tokens += sent2_tokens + ["[SEP]"] + ["[CLS]"]
+            tokens += sent2_tokens + ["[SEP]"]
             token_segments += [1] * (len(sent2_tokens) + 1)
 
         token_ids = tokenizer.convert_tokens_to_ids(tokens)
@@ -177,7 +177,7 @@ if __name__ == "__main__":
                     data_dir,
                     task_name,
                     split,
-                    bert_model="xlnet-base-cased",
+                    bert_model="bert-base-uncased",
                     max_data_samples=2,
                     max_sequence_length=20,
                 )

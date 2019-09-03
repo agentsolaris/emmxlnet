@@ -29,7 +29,7 @@ def output(task_name, immediate_ouput_dict):
     return immediate_ouput_dict[module_name][0]
 
 
-def get_gule_task(task_names, bert_model_name, last_hidden_dropout_prob=0.0):
+def get_gule_task(task_names, bert_model_name):
 
     tasks = dict()
 
@@ -55,16 +55,14 @@ def get_gule_task(task_names, bert_model_name, last_hidden_dropout_prob=0.0):
             module_pool=nn.ModuleDict(
                 {
                     "bert_module": bert_module,
-                    f"{task_name}_feature": BertLastCLSModule(
-                    dropout_prob=last_hidden_dropout_prob
+                    f"{task_name}_pred_head": nn.Linear(
+                        bert_output_dim, task_cardinality
                     ),
-                    f"{task_name}_pred_head": nn.Linear(bert_output_dim, task_cardinality),
-
                 }
             ),
             task_flow=[
                 {
-                    "name": f"{task_name}_bert_module",
+                    "name": "input",
                     "module": "bert_module",
                     "inputs": [
                         ("_input_", "token_ids"),
@@ -73,14 +71,9 @@ def get_gule_task(task_names, bert_model_name, last_hidden_dropout_prob=0.0):
                     ],
                 },
                 {
-                    "name": f"{task_name}_feature",
-                    "module": f"{task_name}_feature",
-                    "inputs": [(f"{task_name}_bert_module", 0)],
-                },
-                {
                     "name": f"{task_name}_pred_head",
                     "module": f"{task_name}_pred_head",
-                    "inputs": [(f"{task_name}_feature", 0)],
+                    "inputs": [("input", 1)],
                 },
             ],
             loss_func=loss_fn,
