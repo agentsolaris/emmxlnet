@@ -1,6 +1,6 @@
 import os
 
-from pytorch_transformers.modeling_bert import BertModel
+from pytorch_transformers.modeling_xlnet import XLNetConfig,XLNetModel
 from torch import nn
 
 
@@ -12,7 +12,7 @@ class BertModule(nn.Module):
         if not os.path.exists(cache_dir):
             os.makedirs(cache_dir)
 
-        self.bert_model = BertModel.from_pretrained(
+        self.bert_model = XLNetModel.from_pretrained(
             bert_model_name, cache_dir=cache_dir, output_hidden_states=True
         )
         self.bert_model.train()
