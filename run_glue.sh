@@ -38,5 +38,5 @@ python run.py \
   --checkpoint_clear True \
   --bert_model ${MODEL} \
   --batch_size 16 \
-  --max_sequence_length 200 
-  
+  --max_sequence_length 200 \
+  --fp16 FP16
