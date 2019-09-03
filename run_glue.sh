@@ -10,16 +10,19 @@
 TASK=${1:-CoLA,MNLI,MRPC,QNLI,QQP,RTE,SST-2,STS-B,WNLI}
 GLUEDATA=${2:-data}
 LOGPATH=${3:-logs}
-SEED=${4:-1}
+SEED=${4:-111}
 GPU=${5:-0}
+MODEL=${5:-xlnet-base-cased}
 
+# 
 python run.py \
   --task ${TASK} \
   --seed ${SEED} \
   --data_dir ${GLUEDATA} \
   --log_path ${LOGPATH} \
   --device ${GPU} \
-  --n_epochs 1 \
+  --fp16 True \
+  --n_epochs 3 \
   --train_split train \
   --valid_split dev \
   --optimizer adam \
@@ -34,6 +37,6 @@ python run.py \
   --checkpoint_task_metrics CoLA/GLUE/dev/matthews_corrcoef:max,MNLI/GLUE/dev/accuracy:max,MRPC/GLUE/dev/accuracy_f1:max,QNLI/GLUE/dev/accuracy:max,QQP/GLUE/dev/accuracy_f1:max,RTE/GLUE/dev/accuracy:max,SNLI/GLUE/dev/accuracy:max,SST-2/GLUE/dev/accuracy:max,STS-B/GLUE/dev/pearson_spearman:max,WNLI/GLUE/dev/accuracy:max \
   --checkpoint_runway 0.5 \
   --checkpoint_clear True \
-  --bert_model xlnet-base-cased \
+  --bert_model ${MODEL} \
   --batch_size 16 \
   --max_sequence_length 200
