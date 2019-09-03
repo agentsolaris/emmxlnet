@@ -88,7 +88,7 @@ def get_gule_task(task_names, bert_model_name):
                 },
             ],
             loss_func=loss_fn,
-            output_func=partial(output, f"{task_name}_pred_head"),
+            output_func=partial(output, task_name),
             scorer=Scorer(metrics=metrics),
         )
 
