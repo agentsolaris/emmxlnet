@@ -2,13 +2,34 @@ from functools import partial
 
 import torch.nn.functional as F
 from emmental.scorer import Scorer
-from emmental.task import EmmentalTask, Operation
+from emmental.task import EmmentalTask
 from modules.bert_module import BertModule, BertLastCLSModule
 from task_config import LABEL_MAPPING, METRIC_MAPPING
 from torch import nn
 from torch.nn import MSELoss
 
+class Operation:
+    """A single operation to execute in a task flow
 
+    The `name` attributes defaults to `module_name` since most of the time, each module
+    is used only once per task flow. For more advanced flows where the same module is
+    used multiple times per forward pass, a name may be explicitly given to
+    differentiate the Operations.
+    """
+
+    def __init__(self, module_name, inputs, name=None):
+        self.name = name or module_name
+        self.module_name = module_name
+        self.inputs = inputs
+
+    def __repr__(self):
+        return (
+            f"Operation(name={self.name}, "
+            f"module_name={self.module_name}, "
+            f"inputs={self.inputs}"
+        )
+      
+        
 def ce_loss(task_name, immediate_ouput_dict, Y, active):
     module_name = f"{task_name}_pred_head"
     return F.cross_entropy(
@@ -72,16 +93,16 @@ def get_gule_task(task_names, bert_model_name, last_hidden_dropout_prob=0.0):
                     ("_input_", "token_masks"),
                        ],
                 ),
-            Operation(
+                Operation(
                 name=f"{task_name}_feature",
                 module_name=f"{task_name}_feature",
                 inputs=[(f"{task_name}_bert_module", 0)],
-            ),
-            Operation(
+                ),
+                Operation(
                 name=f"{task_name}_pred_head",
                 module_name=f"{task_name}_pred_head",
                 inputs=[(f"{task_name}_feature", 0)],
-            ),
+                ),
             ],
             loss_func=loss_fn,
             output_func=partial(output, task_name),
