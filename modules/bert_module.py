@@ -1,6 +1,6 @@
 import os
 
-from pytorch_transformers.modeling_xlnet import XLNetConfig,XLNetModel
+from pytorch_pretrained_bert.modeling import BertModel
 from torch import nn
 
 
@@ -12,12 +12,12 @@ class BertModule(nn.Module):
         if not os.path.exists(cache_dir):
             os.makedirs(cache_dir)
 
-        self.bert_model = XLNetModel.from_pretrained(
-            bert_model_name, cache_dir=cache_dir, output_hidden_states=True
+        self.bert_model = BertModel.from_pretrained(
+            bert_model_name, cache_dir=cache_dir
         )
 
-    def forward(self, token_ids, token_segments,token_type_ids=None, attention_mask=None):
-        loss,  pooled_output, encoded_layers = self.bert_model(
-            token_ids, token_type_ids=None
+    def forward(self, token_ids, token_type_ids=None, attention_mask=None):
+        encoded_layers, pooled_output = self.bert_model(
+            token_ids, token_type_ids, attention_mask
         )
         return encoded_layers, pooled_output

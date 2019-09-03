@@ -13,7 +13,6 @@ LOGPATH=${3:-logs}
 SEED=${4:-1}
 GPU=${5:-0}
 
-# 
 python run.py \
   --task ${TASK} \
   --seed ${SEED} \
@@ -35,6 +34,6 @@ python run.py \
   --checkpoint_task_metrics CoLA/GLUE/dev/matthews_corrcoef:max,MNLI/GLUE/dev/accuracy:max,MRPC/GLUE/dev/accuracy_f1:max,QNLI/GLUE/dev/accuracy:max,QQP/GLUE/dev/accuracy_f1:max,RTE/GLUE/dev/accuracy:max,SNLI/GLUE/dev/accuracy:max,SST-2/GLUE/dev/accuracy:max,STS-B/GLUE/dev/pearson_spearman:max,WNLI/GLUE/dev/accuracy:max \
   --checkpoint_runway 0.5 \
   --checkpoint_clear True \
-  --bert_model xlnet-base-uncased \
+  --bert_model bert-large-uncased \
   --batch_size 16 \
   --max_sequence_length 200

@@ -64,7 +64,7 @@ def add_application_args(parser):
     parser.add_argument(
         "--bert_model",
         type=str,
-        default="xlnet-base-cased",
+        default="bert-base-uncased",
         help="Which bert pretrained model to use",
     )
 
