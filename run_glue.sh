@@ -13,7 +13,7 @@ LOGPATH=${3:-logs}
 SEED=${4:-111}
 GPU=${5:-0}
 MODEL=${6:-xlnet-base-cased}
-NEPCOHS${7:-3}
+NEPCOHS = ${7:-3}
 
 # 
 python run.py \
