@@ -12,7 +12,7 @@ GLUEDATA=${2:-data}
 LOGPATH=${3:-logs}
 SEED=${4:-111}
 GPU= ${5:0}
-MODEL=${6:"xlnet-base-cased"}
+MODEL=${6:xlnet-base-cased}
 NEPCOHS = ${7:3}
 
 # 
