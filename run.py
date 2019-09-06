@@ -4,11 +4,12 @@ import os
 import sys
 
 import emmental
+import slicing
 from emmental import Meta
 from emmental.data import EmmentalDataLoader, EmmentalDataset
 from emmental.learner import EmmentalLearner
 from emmental.model import EmmentalModel
-from emmental.utils.parse_arg import parse_arg, parse_arg_to_config
+from emmental.utils.parse_arg import parse_arg, parse_arg_to_config, str2bool
 from glue_tasks import get_gule_task
 from preprocessor import preprocessor
 
@@ -66,6 +67,17 @@ def add_application_args(parser):
         type=str,
         default="xlnet-base-cased",
         help="Which bert pretrained model to use",
+    )
+
+    parser.add_argument(
+        "--slices", type=str2bool, default=False, help="Whether to include slices"
+    )
+
+    parser.add_argument(
+        "--general_slices",
+        type=str2bool,
+        default=False,
+        help="Whether to include general slices",
     )
 
     parser.add_argument("--batch_size", type=int, default=16, help="batch size")
@@ -144,9 +156,35 @@ if __name__ == "__main__":
                     shuffle=True if split == "train" else False,
                 )
             )
+
             logger.info(f"Built dataloader for {task_name} {split} set.")
 
     tasks = get_gule_task(args.task, args.xlnet_model)
+    slice_tasks = []
+    slice_dataloaders = []
+    for task_name in tasks:
+        if args.slices:
+            logger.info("Initializing task-specific slices")
+            slice_func_dict = slicing.slice_func_dict[task_name]
+            # Include general purpose slices
+            if args.general_slices:
+                logger.info("Including general slices")
+                slice_func_dict.update(slicing.slice_func_dict["general"])
+
+            dataloaders = slicing.add_slice_labels(
+                task_name, dataloaders, slice_func_dict
+            )
+
+            slice_tasks = slicing.add_slice_tasks(
+                task_name, tasks, slice_func_dict, args.slice_hidden_dim
+            )
+            slice_tasks.extend(slice_tasks)
+        else:
+            slice_tasks.append(tasks)
+
+        slice_dataloaders.extend(dataloaders)
+
+
 
     mtl_model = EmmentalModel(name="GLUE_multi_task")
 
@@ -156,11 +194,13 @@ if __name__ == "__main__":
         for task_name, task in tasks.items():
             mtl_model.add_task(task)
 
+
+
     emmental_learner = EmmentalLearner()
 
-    emmental_learner.learn(mtl_model, dataloaders)
+    emmental_learner.learn(mtl_model,  slice_dataloaders)
 
-    scores = mtl_model.score(dataloaders)
+    scores = mtl_model.score(slice_dataloaders)
     logger.info(f"Metrics: {scores}")
     write_to_file("metrics.txt", scores)
     logger.info(
