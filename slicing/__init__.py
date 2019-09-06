@@ -10,6 +10,8 @@ from torch import nn
 
 from . import (
     CB_sfs,
+    MRPC_sfs,
+    SST_sfs,
     COPA_sfs,
     MultiRC_sfs,
     RTE_sfs,
@@ -25,6 +27,8 @@ sys.path.append("..")  # Adds higher directory to python modules path.
 slice_func_dict = {
     "general": general_sfs.slice_func_dict,
     "CB": CB_sfs.slice_func_dict,
+    "MRPC": MRPC_sfs.slice_func_dict,
+    "SST-2": SST_sfs.slice_func_dict,
     "COPA": COPA_sfs.slice_func_dict,
     "MultiRC": MultiRC_sfs.slice_func_dict,
     "RTE": RTE_sfs.slice_func_dict,
