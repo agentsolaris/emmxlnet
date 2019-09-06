@@ -62,10 +62,10 @@ def add_application_args(parser):
     )
 
     parser.add_argument(
-        "--xlnet_model",
+        "--bert_model",
         type=str,
-        default="xlnet-base-uncased",
-        help="Which xlnet pretrained model to use",
+        default="bert-base-uncased",
+        help="Which bert pretrained model to use",
     )
 
     parser.add_argument("--batch_size", type=int, default=16, help="batch size")
@@ -111,7 +111,7 @@ if __name__ == "__main__":
                 data_dir=args.data_dir,
                 task_name=task_name,
                 split=split,
-                xlnet_model_name=args.xlnet_model,
+                bert_model_name=args.bert_model,
                 max_data_samples=args.max_data_samples,
                 max_sequence_length=args.max_sequence_length,
             )
@@ -146,7 +146,7 @@ if __name__ == "__main__":
             )
             logger.info(f"Built dataloader for {task_name} {split} set.")
 
-    tasks = get_gule_task(args.task, args.xlnet_model)
+    tasks = get_gule_task(args.task, args.bert_model)
 
     mtl_model = EmmentalModel(name="GLUE_multi_task")
 
