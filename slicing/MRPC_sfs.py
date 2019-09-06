@@ -1,7 +1,7 @@
 import logging
 
-from slicing.slicing_function import slicing_function
-
+#from slicing.slicing_function import slicing_function
+from .slicing_function import slicing_function
 logger = logging.getLogger(__name__)
 
 
