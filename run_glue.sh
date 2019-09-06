@@ -7,22 +7,19 @@
 #   - SEED: random seed. Defaults to 111.
 #   - GPU_ID: GPU to use, or -1 for CPU. Defaults to 0.
 
-#TASK=${1:-CoLA,MNLI,MRPC,QNLI,QQP,RTE,SST-2,STS-B,WNLI}
+TASK=${1:-CoLA,MNLI,MRPC,QNLI,QQP,RTE,SST-2,STS-B,WNLI}
 GLUEDATA=${2:-data}
 LOGPATH=${3:-logs}
-SEED=${4:-111}
-GPU= ${5:-0}
-MODEL=${6:-'xlnet-base-cased'}
-NEPCOHS = ${7:-3}
+SEED=${4:-1}
+GPU=${5:-0}
 
-# 
 python run.py \
   --task ${TASK} \
   --seed ${SEED} \
   --data_dir ${GLUEDATA} \
   --log_path ${LOGPATH} \
   --device ${GPU} \
-  --n_epochs ${NEPCOHS} \
+  --n_epochs 1 \
   --train_split train \
   --valid_split dev \
   --optimizer adam \
@@ -37,7 +34,6 @@ python run.py \
   --checkpoint_task_metrics CoLA/GLUE/dev/matthews_corrcoef:max,MNLI/GLUE/dev/accuracy:max,MRPC/GLUE/dev/accuracy_f1:max,QNLI/GLUE/dev/accuracy:max,QQP/GLUE/dev/accuracy_f1:max,RTE/GLUE/dev/accuracy:max,SNLI/GLUE/dev/accuracy:max,SST-2/GLUE/dev/accuracy:max,STS-B/GLUE/dev/pearson_spearman:max,WNLI/GLUE/dev/accuracy:max \
   --checkpoint_runway 0.5 \
   --checkpoint_clear True \
-  --xlnet_model ${MODEL} \
+  --bert_model xlnet-base-cased \
   --batch_size 16 \
-  --max_sequence_length 200 \
-  --fp16 True
+  --max_sequence_length 200
