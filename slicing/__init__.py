@@ -12,6 +12,7 @@ from . import (
     CB_sfs,
     MRPC_sfs,
     SST_sfs,
+    STS_sfs,
     COPA_sfs,
     MultiRC_sfs,
     RTE_sfs,
@@ -34,6 +35,7 @@ slice_func_dict = {
     "RTE": RTE_sfs.slice_func_dict,
     "WiC": WiC_sfs.slice_func_dict,
     "WSC": WSC_sfs.slice_func_dict,
+    "STS-B": STS_sfs.slice_func_dict,
     "SWAG": {},
 }
 
