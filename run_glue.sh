@@ -19,7 +19,7 @@ python run.py \
   --data_dir ${GLUEDATA} \
   --log_path ${LOGPATH} \
   --device ${GPU} \
-  --n_epochs 1 \
+  --n_epochs 7 \
   --train_split train \
   --valid_split dev \
   --optimizer adam \
