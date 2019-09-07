@@ -32,7 +32,7 @@ def preprocessor(
     data_dir,
     task_name,
     split,
-    bert_model_name="xlnet-base-cased",
+    xlnet_model_name="xlnet-base-cased",
     max_data_samples=None,
     max_sequence_length=256,
 ):
@@ -41,15 +41,15 @@ def preprocessor(
 
     labels = torch.from_numpy(np.array(labels))
 
-    do_lower_case = "uncased" in bert_model_name
+    do_lower_case = "uncased" in xlnet_model_name
 
     tokenizer = XLNetTokenizer.from_pretrained(
-        bert_model_name, do_lower_case=do_lower_case
+        xlnet_model_name, do_lower_case=do_lower_case
     )
 
-    bert_token_ids = []
-    bert_token_masks = []
-    bert_token_segments = []
+    xlnet_token_ids = []
+    xlnet_token_masks = []
+    xlnet_token_segments = []
 
     for sentence in sentences:
         if len(sentence) not in [1, 2]:
@@ -93,11 +93,11 @@ def preprocessor(
         # Generate mask where 1 for real tokens and 0 for padding tokens
         token_masks = [1] * len(token_ids)
 
-        bert_token_ids.append(torch.LongTensor(token_ids))
-        bert_token_masks.append(torch.LongTensor(token_masks))
-        bert_token_segments.append(torch.LongTensor(token_segments))
+        xlnet_token_ids.append(torch.LongTensor(token_ids))
+        xlnet_token_masks.append(torch.LongTensor(token_masks))
+        xlnet_token_segments.append(torch.LongTensor(token_segments))
 
-    return bert_token_ids, bert_token_segments, bert_token_masks, labels
+    return xlnet_token_ids, xlnet_token_segments, xlnet_token_masks, labels
 
 
 def parse_tsv(data_dir, task_name, split, max_data_samples=None):
@@ -178,7 +178,7 @@ if __name__ == "__main__":
                     data_dir,
                     task_name,
                     split,
-                    bert_model="bert-base-uncased",
+                    xlnet_model="xlnet-base-uncased",
                     max_data_samples=2,
                     max_sequence_length=20,
                 )
