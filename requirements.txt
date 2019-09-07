@@ -1,3 +1,4 @@
-emmental
+emmental==0.0.3
+
 regex
 pytorch-transformers
