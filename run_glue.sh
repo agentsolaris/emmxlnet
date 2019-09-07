@@ -35,7 +35,5 @@ python run.py \
   --checkpoint_runway 0.5 \
   --checkpoint_clear True \
   --xlnet_model xlnet-base-cased \
-  --slices 1 \
-  --general_slices 0 \
   --batch_size 16 \
   --max_sequence_length 200
