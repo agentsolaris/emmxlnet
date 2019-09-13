@@ -19,7 +19,7 @@ python run.py \
   --data_dir ${GLUEDATA} \
   --log_path ${LOGPATH} \
   --device ${GPU} \
-  --n_epochs 2 \
+  --n_epochs 5 \
   --train_split train \
   --valid_split dev \
   --optimizer adam \
@@ -29,12 +29,12 @@ python run.py \
   --counter_unit epoch \
   --evaluation_freq 0.25 \
   --checkpoint_freq 1 \
-  --checkpointing 0 \
+  --checkpointing 1 \
   --checkpoint_metric model/train/all/loss:min \
   --checkpoint_task_metrics CoLA/GLUE/dev/matthews_corrcoef:max,MNLI/GLUE/dev/accuracy:max,MRPC/GLUE/dev/accuracy_f1:max,QNLI/GLUE/dev/accuracy:max,QQP/GLUE/dev/accuracy_f1:max,RTE/GLUE/dev/accuracy:max,SNLI/GLUE/dev/accuracy:max,SST-2/GLUE/dev/accuracy:max,STS-B/GLUE/dev/pearson_spearman:max,WNLI/GLUE/dev/accuracy:max \
   --checkpoint_runway 0.5 \
-  --xlnet_model xlnet-large-cased \
+  --checkpoint_clear True \
+  --xlnet_model xlnet-base-cased \
   --batch_size 8 \
   --max_sequence_length 200
-  #--checkpoint_clear True \
   
