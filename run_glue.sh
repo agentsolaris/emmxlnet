@@ -33,7 +33,7 @@ python run.py \
   --checkpoint_metric model/train/all/loss:min \
   --checkpoint_task_metrics CoLA/GLUE/dev/matthews_corrcoef:max,MNLI/GLUE/dev/accuracy:max,MRPC/GLUE/dev/accuracy_f1:max,QNLI/GLUE/dev/accuracy:max,QQP/GLUE/dev/accuracy_f1:max,RTE/GLUE/dev/accuracy:max,SNLI/GLUE/dev/accuracy:max,SST-2/GLUE/dev/accuracy:max,STS-B/GLUE/dev/pearson_spearman:max,WNLI/GLUE/dev/accuracy:max \
   --checkpoint_runway 0.5 \
-  --checkpoint_clear True \
+  #--checkpoint_clear True \
   --xlnet_model xlnet-base-cased \
   --batch_size 8 \
   --max_sequence_length 200
